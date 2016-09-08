@@ -13,6 +13,13 @@ import { Button } from '../common/button';
 import styles from '../../styles';
 import { firebaseApp } from './authentication';
 import { provider } from './authentication';
+// import { FBSDK } from './authentication';
+
+import FBSDK from 'react-native-fbsdk';
+const {
+  LoginButton,
+  AccessToken
+} = FBSDK;
 
 export class signIn extends Component {
 
@@ -41,6 +48,7 @@ export class signIn extends Component {
 
   signIn() {
     firebase.auth().signInWithPopup(provider)
+    // firebase.auth().signInWithCredential(firebase.auth.FacebookAuthProvider.credential('4ef5ce8a22bb89fcc8396bbcbf3d1e0d'))
       .catch(error => {
         this.setState({ toast: error.message });
       });
@@ -55,6 +63,25 @@ export class signIn extends Component {
         <Text style={styles.error}>
           {this.state.toast}
         </Text>
+
+        <LoginButton
+          publishPermissions={["publish_actions"]}
+          onLoginFinished={
+            (error, result) => {
+              if (error) {
+                alert("login has error: " + result.error);
+              } else if (result.isCancelled) {
+                alert("login is cancelled.");
+              } else {
+                AccessToken.getCurrentAccessToken().then(
+                  (data) => {
+                    alert(data.accessToken.toString())
+                  }
+                )
+              }
+            }
+          }
+          onLogoutFinished={() => alert("logout.")}/>
 
       </View>
     )

@@ -15,6 +15,7 @@ export const provider = new firebase.auth.FacebookAuthProvider();
 // const rootRef = firebase.database().ref();
 // const itemsRef = rootRef.child('items');
 
+
 // listenForItems(itemsRef) {
 //     itemsRef.on('value', (snap) => {
 //
