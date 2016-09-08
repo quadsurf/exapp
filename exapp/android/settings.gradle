@@ -1,0 +1,3 @@
+rootProject.name = 'exapp'
+
+include ':app'
