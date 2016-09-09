@@ -10,6 +10,7 @@ const config = {
   };
 
 export const firebaseApp = firebase.initializeApp(config);
+export const rootRef = firebase.database().ref();
 // export const topicsRef = firebase.database().ref();
 export const provider = new firebase.auth.FacebookAuthProvider();
 // const rootRef = firebase.database().ref();

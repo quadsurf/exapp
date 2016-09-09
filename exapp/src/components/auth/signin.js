@@ -13,6 +13,7 @@ import { Button } from '../common/button';
 import styles from '../../styles';
 import { firebaseApp } from './authentication';
 import { provider } from './authentication';
+import { rootRef } from './authentication';
 
 import FBSDK from 'react-native-fbsdk';
 const {
@@ -59,6 +60,45 @@ export class signIn extends Component {
                     let token = data.accessToken.toString();
                     let provider = firebase.auth.FacebookAuthProvider.credential(token);
                     firebase.auth().signInWithCredential(provider)
+                      .then((user) => {
+                        let uid = user.uid;
+                        let childRef = rootRef.child('users/'+uid);
+                        childRef.once('value')
+                          .then(
+                            (snap) => {
+                              let userExists = snap.val();
+                              if (userExists) {
+                                console.log('already exists');
+                              } else {
+                                let newUser = {};
+                                newUser[uid] = {
+                                  age: '',
+                                  displayName: user.displayName,
+                                  videoURL: ''
+                                };
+                                rootRef.child('users/').update(newUser);
+
+                                let newUserSettings = {};
+                                newUserSettings[uid] = {
+                                  ageMax: '',
+                                  ageMin: '',
+                                  distance: '',
+                                  distanceOn: true,
+                                  email: user.email,
+                                  location: '',
+                                  photoURL: user.photoURL,
+                                  public: true,
+                                  pushNots: true,
+                                  seekingM: false,
+                                  seekingW: false,
+                                  signUpDate: firebase.database.ServerValue.TIMESTAMP
+                                };
+                                rootRef.child('usersSettings/').update(newUserSettings);
+                              }
+                            }
+                          )
+                          .catch((e) => { this.setState({ toast: e.message }) });
+                      })
                       .catch( (e) => {
                         this.setState({ toast: e.message });
                       });

@@ -10,6 +10,7 @@ import {
 
 import styles from '../styles.js';
 import { firebaseApp } from './auth/authentication';
+import { rootRef } from './auth/authentication';
 
 import FBSDK from 'react-native-fbsdk';
 const {
@@ -23,25 +24,33 @@ export class home extends Component {
     this.state = {
       toast: '',
       authUser: {},
-      displayName: ''
+      displayName: '',
+      videoURL: ''
     };
   }
 
   componentDidMount() {
     let user = firebaseApp.auth().currentUser;
-
-    if(!user.displayName){
-      this.props.navigator.push({
-        screen: 'preHome'
-      });
-    } else {
-      this.setState({ displayName: user.displayName });
-    }
-
+    let uid = user.uid;
+    this.setState({ authUser: user });
+    this.setState({ displayName: user.displayName });
+    let hasVideo = rootRef.child('users/'+uid+'/videoURL');
+    hasVideo.once('value')
+      .then(
+        (snap) => {
+          let videoURL = snap.val();
+          if (videoURL === '') {
+            this.props.navigator.push({
+              screen: 'preHome'
+            });
+          } else {
+            this.setState({ videoURL: videoURL });
+          }
+        }
+      );
   }
 
   signOut(){
-    console.log('made it to signOut function!');
     firebaseApp.auth().signOut()
       .then(() => {
         this.props.navigator.popToTop();
@@ -56,18 +65,18 @@ export class home extends Component {
         <View style={styles.header}>
 
           <Text style={styles.displayName}>
-            {this.state.displayName} |
+            {this.state.displayName}
           </Text>
 
-          <TouchableOpacity
-            onPress={() => this.signOut()}
-          >
-            <Text style={styles.link}>
-              Sign Out
-            </Text>
-          </TouchableOpacity>
-
           <LoginButton onLogoutFinished={() => this.signOut()} />
+
+        </View>
+
+        <View style={styles.body}>
+
+          <Text>
+            HOME
+          </Text>
 
         </View>
       </View>
