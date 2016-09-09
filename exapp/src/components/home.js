@@ -11,6 +11,11 @@ import {
 import styles from '../styles.js';
 import { firebaseApp } from './auth/authentication';
 
+import FBSDK from 'react-native-fbsdk';
+const {
+  LoginButton
+} = FBSDK;
+
 export class home extends Component {
 
   constructor(props) {
@@ -36,6 +41,7 @@ export class home extends Component {
   }
 
   signOut(){
+    console.log('made it to signOut function!');
     firebaseApp.auth().signOut()
       .then(() => {
         this.props.navigator.popToTop();
@@ -60,6 +66,8 @@ export class home extends Component {
               Sign Out
             </Text>
           </TouchableOpacity>
+
+          <LoginButton onLogoutFinished={() => this.signOut()} />
 
         </View>
       </View>
