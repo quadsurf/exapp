@@ -6,7 +6,8 @@ import {
   View,
   Text,
   TextInput,
-  TouchableOpacity
+  TouchableOpacity,
+  AsyncStorage
 } from 'react-native';
 
 import { Button } from '../common/button';
@@ -19,7 +20,9 @@ import FBSDK from 'react-native-fbsdk';
 const {
   LoginButton,
   AccessToken,
-  LoginManager
+  LoginManager,
+  GraphRequest,
+  GraphRequestManager
 } = FBSDK;
 
 export class signIn extends Component {
@@ -32,12 +35,19 @@ export class signIn extends Component {
     };
   }
 
+  componentDidUpdate(){
+    this.setStorage();
+  }
+
+  setStorage(){
+    AsyncStorage.setItem('storedUser', JSON.stringify(this.state.authUser));
+  }
+
   componentDidMount(){
     firebaseApp.auth().onAuthStateChanged(firebaseUser=>{
       if(firebaseUser){
         this.setState({ authUser: firebaseUser });
         this.setState({ toast: this.state.authUser.email });
-        console.log(this.state.authUser);
         this.props.navigator.push({
           screen: 'home'
         });
@@ -49,6 +59,7 @@ export class signIn extends Component {
 
   signIn() {
 
+    let self = this;
     LoginManager.logInWithReadPermissions(['public_profile','email']).then(
       function(result) {
         if (result.isCancelled) {
@@ -58,6 +69,33 @@ export class signIn extends Component {
                 .then(
                   (data) => {
                     let token = data.accessToken.toString();
+
+                    //start facebook graph request
+                    const responseInfoCallback = (error, result) => {
+                      if (error) {
+                        console.log(error)
+                        alert('Error fetching data: ' + error.toString());
+                      } else {
+                        AsyncStorage.setItem('facebooker', JSON.stringify(result));
+                      }
+                    }
+
+                    const infoRequest = new GraphRequest(
+                      '/me',
+                      {
+                        accessToken: token,
+                        parameters: {
+                          fields: {
+                            string: 'id,name,first_name,last_name,age_range,link,gender,locale,picture,timezone,updated_time,verified'
+                          }
+                        }
+                      },
+                      responseInfoCallback
+                    );
+
+                    new GraphRequestManager().addRequest(infoRequest).start();
+                    //end facebook graph request
+
                     let provider = firebase.auth.FacebookAuthProvider.credential(token);
                     firebase.auth().signInWithCredential(provider)
                       .then((user) => {
@@ -70,30 +108,52 @@ export class signIn extends Component {
                               if (userExists) {
                                 console.log('already exists');
                               } else {
-                                let newUser = {};
-                                newUser[uid] = {
-                                  age: '',
-                                  displayName: user.displayName,
-                                  videoURL: ''
-                                };
-                                rootRef.child('users/').update(newUser);
+                                AsyncStorage.getItem('facebooker')
+                                .then(
+                                  (res) => {
+                                    let facebookUser = JSON.parse(res)
+                                    let newUser = {};
+                                    newUser[uid] = {
+                                      age: '',
+                                      displayName: facebookUser.first_name,
+                                      videoURL: ''
+                                    };
+                                    rootRef.child('users/').update(newUser);
 
-                                let newUserSettings = {};
-                                newUserSettings[uid] = {
-                                  ageMax: '',
-                                  ageMin: '',
-                                  distance: '',
-                                  distanceOn: true,
-                                  email: user.email,
-                                  location: '',
-                                  photoURL: user.photoURL,
-                                  public: true,
-                                  pushNots: true,
-                                  seekingM: false,
-                                  seekingW: false,
-                                  signUpDate: firebase.database.ServerValue.TIMESTAMP
-                                };
-                                rootRef.child('usersSettings/').update(newUserSettings);
+                                    let newUserSettings = {};
+                                    newUserSettings[uid] = {
+                                      ageMax: '',
+                                      ageMin: 18,
+                                      distance: '',
+                                      distanceOn: true,
+                                      location: '',
+                                      public: true,
+                                      pushNots: true,
+                                      seekingM: false,
+                                      seekingW: false
+                                    };
+                                    rootRef.child('usersSettings/').update(newUserSettings);
+
+                                    let newFacebookUser = {};
+                                    newFacebookUser[uid] = {
+                                      id: facebookUser.id,
+                                      email: user.email,
+                                      name: facebookUser.name,
+                                      first_name: facebookUser.first_name,
+                                      last_name: facebookUser.last_name,
+                                      age_range: facebookUser.age_range,
+                                      link: facebookUser.link,
+                                      gender: facebookUser.gender,
+                                      locale: facebookUser.locale,
+                                      picture: facebookUser.picture.data.url,
+                                      photoURL: user.photoURL,
+                                      timezone: facebookUser.timezone,
+                                      verified: facebookUser.verified,
+                                      signUpDate: firebase.database.ServerValue.TIMESTAMP
+                                    };
+                                    rootRef.child('facebookUsers/').update(newFacebookUser);
+                                  }
+                                );
                               }
                             }
                           )

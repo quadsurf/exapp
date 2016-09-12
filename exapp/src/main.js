@@ -11,13 +11,13 @@ import {
 import { signIn } from './components/auth/signin';
 import { signUp } from './components/auth/signup';
 import { home } from './components/home';
-import { preHome } from './components/auth/preHome';
+import { settings } from './components/auth/settings';
 
 const routes = {
   signIn,
   signUp,
   home,
-  preHome
+  settings
 }
 
 export class Main extends Component {

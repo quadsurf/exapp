@@ -5,7 +5,8 @@ import {
   View,
   Text,
   TextInput,
-  TouchableOpacity
+  TouchableOpacity,
+  AsyncStorage
 } from 'react-native';
 
 import styles from '../styles.js';
@@ -23,31 +24,46 @@ export class home extends Component {
     super(props);
     this.state = {
       toast: '',
+      storedUser: {},
       authUser: {},
       displayName: '',
       videoURL: ''
     };
   }
 
-  componentDidMount() {
+  componentWillMount(){
     let user = firebaseApp.auth().currentUser;
-    let uid = user.uid;
     this.setState({ authUser: user });
-    this.setState({ displayName: user.displayName });
-    let hasVideo = rootRef.child('users/'+uid+'/videoURL');
-    hasVideo.once('value')
+    AsyncStorage.getItem('storedUser')
+      .then(
+        (res) => {
+          let storedUser = JSON.parse(res);
+          let displayName = storedUser.displayName.split(' ')[0];
+          this.setState({ storedUser: storedUser });
+          this.setState({ displayName: displayName });
+        }
+      );
+  }
+
+  componentDidMount() {
+    let authUser = this.state.authUser;
+    if (!authUser) {
+      this.signOut();
+    } else {
+    let uid = authUser.uid;
+    let hasAge = rootRef.child('usersSettings/'+uid+'/ageMax');
+    hasAge.once('value')
       .then(
         (snap) => {
-          let videoURL = snap.val();
-          if (videoURL === '') {
+          let ageMax = snap.val();
+          if (ageMax === '') {
             this.props.navigator.push({
-              screen: 'preHome'
+              screen: 'settings'
             });
-          } else {
-            this.setState({ videoURL: videoURL });
           }
         }
       );
+    }
   }
 
   signOut(){
