@@ -1,40 +1,39 @@
 
 
 import React, { Component } from 'react';
-import t from 'tcomb-form-native';
+
 import {
   Text,
   TextInput,
   View,
   TouchableOpacity,
   AsyncStorage,
-  TouchableHighlight
+  TouchableHighlight,
+  StyleSheet,
+  Switch,
+  ScrollView
 } from 'react-native';
 
 import { firebaseApp, rootRef } from './authentication';
-import styles from '../../styles';
+// import styles from '../../styles';
 
-const Form = t.form.Form;
+import FBSDK from 'react-native-fbsdk';
+const {
+  LoginButton
+} = FBSDK;
 
-const Person = t.struct({
-  name: t.String,              // a required string
-  surname: t.maybe(t.String),  // an optional string
-  age: t.Number,               // a required number
-  rememberMe: t.Boolean        // a boolean
-});
-
-const SettingsModel = t.struct({
-  birthYear: t.Number,
-  ageMin: t.Number,
-  ageMax: t.Number,
-  distanceOn: t.Boolean,
-  distance: t.Number,
-  location: t.String,
-  public: t.Boolean,
-  pushNots: t.Boolean,
-  seekingM: t.Boolean,
-  seekingW: t.Boolean
-});
+// const SettingsModel = t.struct({
+//   birthYear: t.Number,
+//   ageMin: t.Number,
+//   ageMax: t.Number,
+//   distanceOn: t.Boolean,
+//   distance: t.Number,
+//   location: t.String,
+//   public: t.Boolean,
+//   pushNots: t.Boolean,
+//   seekingM: t.Boolean,
+//   seekingW: t.Boolean
+// });
 
 // birthYear={this.state.settings.birthYear},
 // ageMax={this.state.settings.ageMax},
@@ -47,10 +46,6 @@ const SettingsModel = t.struct({
 // seekingM={this.state.settings.seekingM},
 // seekingW={this.state.settings.seekingW}
 
-const options = {
-  auto: 'placeholders'
-};
-
 export class settings extends Component {
 
   constructor(props) {
@@ -58,14 +53,17 @@ export class settings extends Component {
     this.state = {
       toast: '',
       uid: '',
-      settings: {},
       displayName: '',
-      value: {
-        name: 'Yo Yo',
-        surname: 'Man',
-        age: 23,
-        rememberMe: true
-      }
+      birthYear: null,
+      public: null,
+      pushNots: null,
+      distanceOn: null,
+      location: null,
+      distance: null,
+      ageMin: null,
+      ageMax: null,
+      seekingM: null,
+      seekingW: null
     };
   }
 
@@ -99,7 +97,16 @@ export class settings extends Component {
           let settings = snap.val();
           let uid = this.state.uid.toString();
           this.setState({
-            settings: settings[uid]
+            birthYear: settings[uid].birthYear,
+            public: settings[uid].public,
+            pushNots: settings[uid].pushNots,
+            distanceOn: settings[uid].distanceOn,
+            location: settings[uid].location,
+            distance: settings[uid].distance,
+            ageMin: settings[uid].ageMin,
+            ageMax: settings[uid].ageMax,
+            seekingM: settings[uid].seekingM,
+            seekingW: settings[uid].seekingW
           });
         }
       );
@@ -112,10 +119,14 @@ export class settings extends Component {
   }
 
   updateSettings(key,value){
-    let settingsRef = rootRef.child('settings/'+uid+'/'+key);
-    settingsRef.update(value)
+    let uid = this.state.uid;
+    let settingsRef = rootRef.child('settings/'+uid);
+    settingsRef.update({
+      [key]: value
+    })
       .then(
         () => {
+          this.setState({ [key]: value });
           this.setState({ toast: 'Updated' });
         },
         (e) => {
@@ -124,46 +135,216 @@ export class settings extends Component {
       );
   }
 
-  onPress() {
-    // call getValue() to get the values of the form
-    let settings = this.refs.form.getValue();
-    if (settings) { // if validation fails, value will be null
-      console.log(settings); // value here is an instance of Person
-    }
+  signOut(){
+    firebaseApp.auth().signOut()
+      .then(() => {
+        this.props.navigator.popToTop();
+      }, (e) => {
+        this.setState({ toast: e.message });
+      });
   }
 
   render() {
     return (
       <View style={styles.container}>
-        <Text>
-          Search Settings for {this.state.displayName}
+        <View style={styles.headerView}>
+          <Text style={styles.headerText}>
+            Excited
+          </Text>
+        </View>
+        <View style={styles.labelRowView}>
+          <Text style={styles.labelRowText}>
+            Settings for {this.state.displayName}
+          </Text>
+        </View>
+        <ScrollView>
+
+        <Text style={styles.wrapperHeaderText}>
+          SEARCH SETTINGS
         </Text>
-        <Text>
-         birthYear={this.state.settings.birthYear},
-         ageMax={this.state.settings.ageMax},
-         ageMin={this.state.settings.ageMin},
-         distance={this.state.settings.distance},
-         distanceOn={this.state.settings.distanceOn},
-         location={this.state.settings.location},
-         public={this.state.settings.public},
-         pushNots={this.state.settings.pushNots},
-         seekingM={this.state.settings.seekingM},
-         seekingW={this.state.settings.seekingW}
-       </Text>
-       <View style={styles.container}>
-        {/* display */}
-        <Form
-          ref="form"
-          type={SettingsModel}
-          options={options}
-          value={this.state.settings}
-        />
-        <TouchableHighlight style={styles.button} onPress={()=>this.onPress()} underlayColor='#99d9f4'>
-          <Text style={styles.buttonText}>Save</Text>
-        </TouchableHighlight>
-      </View>
+        <View style={styles.wrapperView}>
+
+          <View style={styles.wrapperRowView}>
+            <Text style={styles.wrapperRowText}>
+              Limit Distance
+            </Text>
+            <Switch
+              onValueChange={(value) => this.updateSettings('distanceOn',value)}
+              value={this.state.distanceOn}
+            />
+          </View>
+
+          <TouchableOpacity style={styles.wrapperRowView}>
+            <Text style={styles.wrapperRowText}>
+              Limit Distance To
+            </Text>
+            <Text style={styles.wrapperRowText}>
+              Austin,TX >
+            </Text>
+          </TouchableOpacity>
+
+          <View style={styles.wrapperRowView}>
+            <Text style={styles.wrapperRowText}>
+              Limit Distance to {this.state.location} by How Many Miles
+            </Text>
+          </View>
+
+          <View style={styles.wrapperRowView}>
+            <Text style={styles.wrapperRowText}>
+              Minimum Age
+            </Text>
+            <Text style={styles.wrapperRowText}>
+              Maximum Age
+            </Text>
+          </View>
+
+          <View style={styles.wrapperRowView}>
+            <Text style={styles.wrapperRowText}>
+              Seeking Men
+            </Text>
+            <Switch
+              onValueChange={(value) => this.updateSettings('seekingM',value)}
+              value={this.state.seekingM}
+            />
+          </View>
+
+          <View style={styles.wrapperRowView}>
+            <Text style={styles.wrapperRowText}>
+              Seeking Women
+            </Text>
+            <Switch
+              onValueChange={(value) => this.updateSettings('seekingW',value)}
+              value={this.state.seekingW}
+            />
+          </View>
+
+        </View>
+
+
+        <Text style={styles.wrapperHeaderText}>
+          PROFILE SETTINGS
+        </Text>
+        <View style={styles.wrapperView}>
+
+          <TouchableOpacity style={styles.wrapperRowView}>
+            <Text style={styles.wrapperRowText}>
+              My Video
+            </Text>
+            <Text style={styles.wrapperRowText}>
+              >
+            </Text>
+          </TouchableOpacity>
+
+          <View style={styles.wrapperRowView}>
+            <Text style={styles.wrapperRowText}>
+              Make My Profile Public
+            </Text>
+            <Switch
+              onValueChange={(value) => this.updateSettings('public',value)}
+              value={this.state.public}
+            />
+          </View>
+
+          <View style={styles.wrapperRowView}>
+            <Text style={styles.wrapperRowText}>
+              Birth Year
+            </Text>
+            <Text style={styles.wrapperRowText}>
+              {this.state.birthYear}
+            </Text>
+          </View>
+
+          <View style={styles.wrapperRowView}>
+            <Text style={styles.wrapperRowText}>
+              Allow Push Notifications
+            </Text>
+            <Switch
+              onValueChange={(value) => this.updateSettings('pushNots',value)}
+              value={this.state.pushNots}
+            />
+          </View>
+
+        </View>
+
+        <View style={styles.labelRowView}>
+          <LoginButton onLogoutFinished={() => this.signOut()} />
+        </View>
+
+        <Text style={styles.wrapperFooterText}>
+          Excited, Copyright 2016
+        </Text>
+
+        </ScrollView>
       </View>
     )
   }
 
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#EFEFEF',
+  },
+  headerView: {
+    height: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#42bfc2'
+  },
+  headerText: {
+    color: '#fff',
+    paddingTop: 15,
+    fontSize: 20
+  },
+  labelRowView: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: '#d3d3d3',
+    marginTop: 25,
+    height: 50
+  },
+  labelRowText: {
+    fontSize: 16,
+    color: '#EC5097'
+  },
+  wrapperHeaderText: {
+    color: '#939393',
+    fontSize: 12,
+    fontWeight: 'bold',
+    marginTop: 25,
+    marginBottom: 5,
+    marginLeft: 15
+  },
+  wrapperFooterText: {
+    color: '#939393',
+    fontSize: 16,
+    marginTop: 25,
+    marginBottom: 25,
+    alignSelf: 'center'
+  },
+  wrapperView: {
+    justifyContent: 'center',
+    backgroundColor: '#fff',
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: '#d3d3d3'
+  },
+  wrapperRowView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingRight: 15,
+    paddingLeft: 15,
+    height: 65,
+    borderBottomWidth: 1,
+    borderColor: '#d3d3d3'
+  },
+  wrapperRowText: {
+    fontSize: 16,
+    color: '#939393'
+  }
+});
