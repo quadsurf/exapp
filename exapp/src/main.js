@@ -12,12 +12,14 @@ import { signIn } from './components/auth/signin';
 import { signUp } from './components/auth/signup';
 import { home } from './components/home';
 import { settings } from './components/auth/settings';
+import { mapSelector } from './components/mapSelector';
 
 const routes = {
   signIn,
   signUp,
   home,
-  settings
+  settings,
+  mapSelector
 }
 
 export class Main extends Component {

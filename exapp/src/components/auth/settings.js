@@ -11,7 +11,8 @@ import {
   TouchableHighlight,
   StyleSheet,
   Switch,
-  ScrollView
+  ScrollView,
+  Slider
 } from 'react-native';
 
 import { firebaseApp, rootRef } from './authentication';
@@ -21,30 +22,6 @@ import FBSDK from 'react-native-fbsdk';
 const {
   LoginButton
 } = FBSDK;
-
-// const SettingsModel = t.struct({
-//   birthYear: t.Number,
-//   ageMin: t.Number,
-//   ageMax: t.Number,
-//   distanceOn: t.Boolean,
-//   distance: t.Number,
-//   location: t.String,
-//   public: t.Boolean,
-//   pushNots: t.Boolean,
-//   seekingM: t.Boolean,
-//   seekingW: t.Boolean
-// });
-
-// birthYear={this.state.settings.birthYear},
-// ageMax={this.state.settings.ageMax},
-// ageMin={this.state.settings.ageMin},
-// distance={this.state.settings.distance},
-// distanceOn={this.state.settings.distanceOn},
-// location={this.state.settings.location},
-// public={this.state.settings.public},
-// pushNots={this.state.settings.pushNots},
-// seekingM={this.state.settings.seekingM},
-// seekingW={this.state.settings.seekingW}
 
 export class settings extends Component {
 
@@ -147,16 +124,19 @@ export class settings extends Component {
   render() {
     return (
       <View style={styles.container}>
+
         <View style={styles.headerView}>
           <Text style={styles.headerText}>
             Excited
           </Text>
         </View>
+
         <View style={styles.labelRowView}>
           <Text style={styles.labelRowText}>
             Settings for {this.state.displayName}
           </Text>
         </View>
+
         <ScrollView>
 
         <Text style={styles.wrapperHeaderText}>
@@ -174,27 +154,61 @@ export class settings extends Component {
             />
           </View>
 
-          <TouchableOpacity style={styles.wrapperRowView}>
+          <TouchableOpacity
+            onPress={() => {
+              this.props.navigator.push({
+                screen: 'mapSelector'
+              });
+            }}
+            style={styles.wrapperRowView}
+            >
             <Text style={styles.wrapperRowText}>
-              Limit Distance To
+              Limit Distance To {this.state.location}
             </Text>
-            <Text style={styles.wrapperRowText}>
-              Austin,TX >
+            <Text style={styles.arrowText}>
+              >
             </Text>
           </TouchableOpacity>
 
-          <View style={styles.wrapperRowView}>
+          <View style={styles.sliderRowView}>
             <Text style={styles.wrapperRowText}>
-              Limit Distance to {this.state.location} by How Many Miles
+              Limit Distance to {this.state.location} by {this.state.distance} Miles
             </Text>
+            <Slider
+              style={styles.slider}
+              minimumValue={10}
+              maximumValue={100}
+              step={5}
+              value={this.state.distance}
+              onSlidingComplete={(value) => this.updateSettings('distance',value)}
+            />
           </View>
 
-          <View style={styles.wrapperRowView}>
+          <View style={styles.sliderRowView}>
             <Text style={styles.wrapperRowText}>
-              Minimum Age
+              Minimum Age {this.state.ageMin}
             </Text>
+
+            <Slider
+              style={styles.slider}
+              minimumValue={18}
+              maximumValue={60}
+              step={1}
+              value={this.state.ageMin}
+              onSlidingComplete={(value) => this.updateSettings('ageMin',value)}
+            />
+
+            <Slider
+              style={styles.slider}
+              minimumValue={21}
+              maximumValue={80}
+              step={1}
+              value={this.state.ageMax}
+              onSlidingComplete={(value) => this.updateSettings('ageMax',value)}
+            />
+
             <Text style={styles.wrapperRowText}>
-              Maximum Age
+              Maximum Age {this.state.ageMax}
             </Text>
           </View>
 
@@ -230,7 +244,7 @@ export class settings extends Component {
             <Text style={styles.wrapperRowText}>
               My Video
             </Text>
-            <Text style={styles.wrapperRowText}>
+            <Text style={[styles.wrapperRowText, styles.arrowText]}>
               >
             </Text>
           </TouchableOpacity>
@@ -346,5 +360,25 @@ const styles = StyleSheet.create({
   wrapperRowText: {
     fontSize: 16,
     color: '#939393'
+  },
+  sliderRowView: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingRight: 15,
+    paddingLeft: 15,
+    paddingTop: 20,
+    paddingBottom: 20,
+    borderBottomWidth: 1,
+    borderColor: '#d3d3d3'
+  },
+  arrowText: {
+    fontSize: 30,
+    color: '#d3d3d3'
+  },
+  slider: {
+    width: 350,
+    height: 10,
+    margin: 10,
+    padding: 10
   }
 });
