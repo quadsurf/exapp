@@ -12,9 +12,8 @@ import {
 
 import { Button } from '../common/button';
 import styles from '../../styles';
-import { firebaseApp } from './authentication';
-import { provider } from './authentication';
-import { rootRef } from './authentication';
+import { firebaseApp, rootRef } from './authentication';
+// import { provider } from './authentication';
 
 import FBSDK from 'react-native-fbsdk';
 const {
@@ -111,20 +110,23 @@ export class signIn extends Component {
                                 AsyncStorage.getItem('facebooker')
                                 .then(
                                   (res) => {
-                                    let facebookUser = JSON.parse(res)
+                                    let facebookUser = JSON.parse(res);
+                                    let displayName = facebookUser.first_name
                                     let newUser = {};
                                     newUser[uid] = {
                                       age: '',
-                                      displayName: facebookUser.first_name,
+                                      displayName: displayName,
                                       videoURL: ''
                                     };
                                     rootRef.child('users/').update(newUser);
+                                    AsyncStorage.setItem('displayName', JSON.stringify(displayName));
 
                                     let newUserSettings = {};
                                     newUserSettings[uid] = {
-                                      ageMax: '',
+                                      birthYear: '',
+                                      ageMax: 80,
                                       ageMin: 18,
-                                      distance: '',
+                                      distance: 50,
                                       distanceOn: true,
                                       location: '',
                                       public: true,
@@ -132,7 +134,7 @@ export class signIn extends Component {
                                       seekingM: false,
                                       seekingW: false
                                     };
-                                    rootRef.child('usersSettings/').update(newUserSettings);
+                                    rootRef.child('settings/').update(newUserSettings);
 
                                     let newFacebookUser = {};
                                     newFacebookUser[uid] = {
@@ -151,13 +153,13 @@ export class signIn extends Component {
                                       verified: facebookUser.verified,
                                       signUpDate: firebase.database.ServerValue.TIMESTAMP
                                     };
-                                    rootRef.child('facebookUsers/').update(newFacebookUser);
+                                    rootRef.child('facebook/').update(newFacebookUser);
                                   }
                                 );
                               }
                             }
                           )
-                          .catch((e) => { this.setState({ toast: e.message }) });
+                          .catch( (e) => { this.setState({ toast: e.message }) });
                       })
                       .catch( (e) => {
                         this.setState({ toast: e.message });
@@ -166,7 +168,7 @@ export class signIn extends Component {
                 );
         }
       },
-      function(error) {
+      (error) => {
         this.setState({ toast: error })
       }
     );

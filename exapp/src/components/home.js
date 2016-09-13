@@ -10,8 +10,7 @@ import {
 } from 'react-native';
 
 import styles from '../styles.js';
-import { firebaseApp } from './auth/authentication';
-import { rootRef } from './auth/authentication';
+import { firebaseApp, rootRef } from './auth/authentication';
 
 import FBSDK from 'react-native-fbsdk';
 const {
@@ -51,12 +50,12 @@ export class home extends Component {
       this.signOut();
     } else {
     let uid = authUser.uid;
-    let hasAge = rootRef.child('usersSettings/'+uid+'/ageMax');
-    hasAge.once('value')
+    let hasLocation = rootRef.child('settings/'+uid+'/location');
+    hasLocation.once('value')
       .then(
         (snap) => {
-          let ageMax = snap.val();
-          if (ageMax === '') {
+          let location = snap.val();
+          if (location === '') {
             this.props.navigator.push({
               screen: 'settings'
             });
@@ -70,8 +69,8 @@ export class home extends Component {
     firebaseApp.auth().signOut()
       .then(() => {
         this.props.navigator.popToTop();
-      }, (error) => {
-        this.setState({ toast: error.message });
+      }, (e) => {
+        this.setState({ toast: e.message });
       });
   }
 
