@@ -252,7 +252,13 @@ export class settings extends Component {
         </Text>
         <View style={styles.wrapperView}>
 
-          <TouchableOpacity style={styles.wrapperRowView}>
+          <TouchableOpacity
+            onPress={() => {
+              this.props.navigator.push({
+                screen: 'myVideos'
+              });
+            }}
+            style={styles.wrapperRowView}>
             <Text style={styles.wrapperRowText}>
               My Video
             </Text>
