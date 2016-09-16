@@ -101,13 +101,19 @@ export class signIn extends Component {
       birthYear: '',
       ageMax: 80,
       ageMin: 18,
+      cities: {
+        city: 'Austin, TX',
+        latitude: 97.7431,
+        longitude: 30.2672
+      },
       distance: 50,
       distanceOn: true,
-      location: '',
+      location: 'done',
       public: true,
       pushNots: true,
       seekingM: false,
-      seekingW: false
+      seekingW: false,
+      settingsCompleted: false
     };
     rootRef.child('settings/').update(newUserSettings);
   }
@@ -134,7 +140,7 @@ export class signIn extends Component {
         let uid = user.uid;
         let email = user.email;
         let photo = user.photoURL;
-
+        console.log('sigin screen - Authenticated User? ',user);
 
         let usersRef = rootRef.child('users/'+uid);
         usersRef.once('value')
@@ -239,7 +245,6 @@ export class signIn extends Component {
                         console.error(error);
                         alert('Error fetching data: ' + error.toString());
                       } else {
-                        // AsyncStorage.setItem('facebooker', JSON.stringify(result));
                         self.createFirebaseUser(token,result);
                       }
                     }

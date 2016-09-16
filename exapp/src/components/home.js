@@ -6,7 +6,8 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  AsyncStorage
+  AsyncStorage,
+  TouchableHighlight
 } from 'react-native';
 
 import styles from '../styles.js';
@@ -14,7 +15,8 @@ import { firebaseAuth, rootRef } from './auth/authentication';
 
 import FBSDK from 'react-native-fbsdk';
 const {
-  LoginButton
+  LoginButton,
+  LoginManager
 } = FBSDK;
 
 export class home extends Component {
@@ -52,20 +54,20 @@ export class home extends Component {
   // }
 
   componentDidMount() {
-    let authUser = firebaseAuth.currentUser;
-    console.log('home screen Authenticated User? ',authUser);
-    if (!authUser) {
+    if (!firebaseAuth.currentUser) {
       this.signOut();
     } else {
+    let authUser = firebaseAuth.currentUser;
     let uid = authUser.uid;
-    let hasLocation = rootRef.child('settings/'+uid+'/location');
+    let hasLocation = rootRef.child(`settings/${uid}/location`);
     hasLocation.once('value')
       .then(
         (snap) => {
           let location = snap.val();
-          if (location === '') {
+          if (location === 'done') {
             this.props.navigator.push({
-              screen: 'settings'
+              screen: 'settings',
+              uid: uid
             });
           }
         }
@@ -74,9 +76,13 @@ export class home extends Component {
   }
 
   signOut(){
+    LoginManager.logOut();
     firebaseAuth.signOut()
       .then(() => {
-        this.props.navigator.popToTop();
+        let authUser = firebaseAuth.currentUser;
+        if (!authUser){
+          this.props.navigator.popToTop();
+        }
       }, (e) => {
         this.setState({ toast: e.message });
       });
@@ -90,8 +96,25 @@ export class home extends Component {
           <Text style={styles.displayName}>
             {this.state.displayName}
           </Text>
+          <TouchableHighlight
+            onPress={() => this.signOut()}
+          >
+            <Text>
+              Log Out
+            </Text>
+          </TouchableHighlight>
 
-          <LoginButton onLogoutFinished={() => this.signOut()} />
+          <TouchableHighlight
+            onPress={() => {
+              this.props.navigator.push({
+                screen: 'settings'
+              })
+            }}
+          >
+            <Text>
+              Settings
+            </Text>
+          </TouchableHighlight>
 
         </View>
 

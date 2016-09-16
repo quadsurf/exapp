@@ -20,7 +20,8 @@ import { firebaseAuth, rootRef } from './authentication';
 
 import FBSDK from 'react-native-fbsdk';
 const {
-  LoginButton
+  LoginButton,
+  LoginManager
 } = FBSDK;
 
 export class settings extends Component {
@@ -30,12 +31,14 @@ export class settings extends Component {
     this.state = {
       toast: '',
       uid: '',
+      // propsUid: '',
+      // authUid: '',
       displayName: '',
       birthYear: null,
       public: null,
       pushNots: null,
       distanceOn: null,
-      location: null,
+      cities: {},
       distance: null,
       ageMin: null,
       ageMax: null,
@@ -49,9 +52,13 @@ export class settings extends Component {
       .then(
         (res) => {
           let user = JSON.parse(res);
+          // let propsUid = this.props.uid;
+          // let authUid = firebaseAuth.currentUser.uid;
           this.setState({
             uid: user.uid,
             displayName: user.displayName
+            // propsUid: propsUid,
+            // authUid: authUid
           });
         }
       );
@@ -59,7 +66,12 @@ export class settings extends Component {
 
   componentDidMount(){
     let uid = this.state.uid;
-    let settingsRef = rootRef.child('settings/'+uid);
+    if (!firebaseAuth.currentUser) {
+      this.signOut();
+    } else {
+    // let authUser = firebaseAuth.currentUser;
+    // console.log('settings screen - Authenticated User? ',authUser);
+    let settingsRef = rootRef.child(`settings/${uid}`);
     settingsRef.once('value')
       .then(
         (snap) => {
@@ -70,15 +82,24 @@ export class settings extends Component {
             public: settings[uid].public,
             pushNots: settings[uid].pushNots,
             distanceOn: settings[uid].distanceOn,
-            location: settings[uid].location,
+            cities: settings[uid].cities,
             distance: settings[uid].distance,
             ageMin: settings[uid].ageMin,
             ageMax: settings[uid].ageMax,
             seekingM: settings[uid].seekingM,
             seekingW: settings[uid].seekingW
           });
+          console.log('this.state.cities');
+          console.log(this.state.cities);
+        }
+      )
+      .catch(
+        (e) => {
+          console.log('Failed to Return Settings Data from DB');
+          console.error(e);
         }
       );
+    }
   }
 
   updateSettings(key,value){
@@ -99,9 +120,13 @@ export class settings extends Component {
   }
 
   signOut(){
+    LoginManager.logOut();
     firebaseAuth.signOut()
       .then(() => {
-        this.props.navigator.popToTop();
+        let authUser = firebaseAuth.currentUser;
+        if (!authUser){
+          this.props.navigator.popToTop();
+        }
       }, (e) => {
         this.setState({ toast: e.message });
       });
@@ -143,13 +168,14 @@ export class settings extends Component {
           <TouchableOpacity
             onPress={() => {
               this.props.navigator.push({
-                screen: 'mapSelector'
+                screen: 'mapSelector',
+                cities: this.state.cities
               });
             }}
             style={styles.wrapperRowView}
             >
             <Text style={styles.wrapperRowText}>
-              Limit Distance To {this.state.location}
+              Limit Distance To
             </Text>
             <Text style={styles.arrowText}>
               >
@@ -158,7 +184,7 @@ export class settings extends Component {
 
           <View style={styles.sliderRowView}>
             <Text style={styles.wrapperRowText}>
-              Limit Distance to {this.state.location} by {this.state.distance} Miles
+              Limit Distance to  by {this.state.distance} Miles
             </Text>
             <Slider
               style={styles.slider}
@@ -266,9 +292,13 @@ export class settings extends Component {
 
         </View>
 
-        <View style={styles.labelRowView}>
-          <LoginButton onLogoutFinished={() => this.signOut()} />
-        </View>
+        <TouchableHighlight
+          onPress={() => this.signOut()}
+          style={styles.labelRowView}>
+          <Text>
+            Log Out
+          </Text>
+        </TouchableHighlight>
 
         <Text style={styles.wrapperFooterText}>
           Excited, Copyright 2016

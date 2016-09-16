@@ -31,9 +31,12 @@ export class Main extends Component {
   }
   renderScene(route,navigator){
     let Component = routes[route.screen];
+    let { cities, uid } = route;
     return (
       <Component
         navigator={navigator}
+        cities={cities}
+        uid={uid}
       />
     )
   }
