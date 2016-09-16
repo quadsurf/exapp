@@ -15,7 +15,7 @@ import {
   Slider
 } from 'react-native';
 
-import { firebaseApp, rootRef } from './authentication';
+import { firebaseAuth, rootRef } from './authentication';
 // import styles from '../../styles';
 
 import FBSDK from 'react-native-fbsdk';
@@ -50,16 +50,8 @@ export class settings extends Component {
         (res) => {
           let user = JSON.parse(res);
           this.setState({
-            uid: user.uid
-          });
-        }
-      );
-    AsyncStorage.getItem('displayName')
-      .then(
-        (res) => {
-          let displayName = JSON.parse(res);
-          this.setState({
-            displayName: displayName
+            uid: user.uid,
+            displayName: user.displayName
           });
         }
       );
@@ -89,12 +81,6 @@ export class settings extends Component {
       );
   }
 
-  componentDidUpdate(){
-    console.log(this.state.uid);
-    console.log(this.state.settings);
-    console.log(this.state.displayName);
-  }
-
   updateSettings(key,value){
     let uid = this.state.uid;
     let settingsRef = rootRef.child('settings/'+uid);
@@ -113,7 +99,7 @@ export class settings extends Component {
   }
 
   signOut(){
-    firebaseApp.auth().signOut()
+    firebaseAuth.signOut()
       .then(() => {
         this.props.navigator.popToTop();
       }, (e) => {

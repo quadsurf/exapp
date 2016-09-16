@@ -8,11 +8,15 @@ const config = {
     databaseURL: "https://exapp-7ab81.firebaseio.com",
     storageBucket: "exapp-7ab81.appspot.com",
   };
+firebase.initializeApp(config);
 
-export const firebaseApp = firebase.initializeApp(config);
 export const rootRef = firebase.database().ref();
+export const firebaseAuth = firebase.auth();
+export const facebookProvider = firebase.auth.FacebookAuthProvider;
+export const firebaseTime = firebase.database.ServerValue.TIMESTAMP;
+
 // export const topicsRef = firebase.database().ref();
-export const provider = new firebase.auth.FacebookAuthProvider();
+// export const provider = new firebase.auth.FacebookAuthProvider();
 // const rootRef = firebase.database().ref();
 // const itemsRef = rootRef.child('items');
 

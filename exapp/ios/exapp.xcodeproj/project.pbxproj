@@ -25,9 +25,10 @@
 		8004C16A1D81D9E100F4A0FF /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8004C1681D81D9E000F4A0FF /* FBSDKLoginKit.framework */; };
 		8004C16B1D81D9E100F4A0FF /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8004C1691D81D9E100F4A0FF /* FBSDKShareKit.framework */; };
 		8004C16D1D81DA7000F4A0FF /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8004C16C1D81DA7000F4A0FF /* FBSDKCoreKit.framework */; };
-		804C863E1D8922E800F12843 /* ios in Resources */ = {isa = PBXBuildFile; fileRef = 804C863D1D8922E800F12843 /* ios */; };
+		800B60051D8A1CC70040BC3B /* libRCTMapboxGL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 800B60041D8A1CC70040BC3B /* libRCTMapboxGL.a */; };
+		80F42AD01D8A259E007A216D /* Mapbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80F42ACF1D8A259E007A216D /* Mapbox.framework */; };
+		80F42AD11D8A259E007A216D /* Mapbox.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 80F42ACF1D8A259E007A216D /* Mapbox.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
-		B1DBB96D09A64D2B8DBFE02E /* libAirMaps.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D6662960086742649BF992B6 /* libAirMaps.a */; };
 		E30198E4C19743D2B3E65745 /* libRCTFBSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B369A6B6084289815424BA /* libRCTFBSDK.a */; };
 /* End PBXBuildFile section */
 
@@ -109,12 +110,19 @@
 			remoteGlobalIDString = 9350E0F11CE3B0920041D815;
 			remoteInfo = RCTFBSDK;
 		};
-		80B4C25D1D88B00400BC0336 /* PBXContainerItemProxy */ = {
+		80F42ACB1D8A2540007A216D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 8E7905E47ED847EEB5926F42 /* AirMaps.xcodeproj */;
+			containerPortal = 80F42AC61D8A2540007A216D /* RCTMapboxGL.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 11FA5C511C4A1296003AC2EE;
-			remoteInfo = AirMaps;
+			remoteGlobalIDString = C5DBB3401AF2EF2B00E611A9;
+			remoteInfo = RCTMapboxGL;
+		};
+		80F42ACD1D8A2540007A216D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 80F42AC61D8A2540007A216D /* RCTMapboxGL.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C5DBB34B1AF2EF2B00E611A9;
+			remoteInfo = RCTMapboxGLTests;
 		};
 		832341B41AAA6A8300B99B32 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -124,6 +132,20 @@
 			remoteInfo = RCTText;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		800B60011D8A1B9D0040BC3B /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				80F42AD11D8A259E007A216D /* Mapbox.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
@@ -151,10 +173,10 @@
 		8004C1681D81D9E000F4A0FF /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = "../../../../../../../Documents/FacebookSDKs-iOS-4.15.0/FBSDKLoginKit.framework"; sourceTree = "<group>"; };
 		8004C1691D81D9E100F4A0FF /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKShareKit.framework; path = "../../../../../../../Documents/FacebookSDKs-iOS-4.15.0/FBSDKShareKit.framework"; sourceTree = "<group>"; };
 		8004C16C1D81DA7000F4A0FF /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = "../../../../../../../Documents/FacebookSDKs-iOS-4.15.0/FBSDKCoreKit.framework"; sourceTree = "<group>"; };
-		804C863D1D8922E800F12843 /* ios */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ios; sourceTree = "<group>"; };
+		800B60041D8A1CC70040BC3B /* libRCTMapboxGL.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libRCTMapboxGL.a; path = "Pods/../build/Debug-iphoneos/RCTMapboxGL/libRCTMapboxGL.a"; sourceTree = SOURCE_ROOT; };
+		80F42AC61D8A2540007A216D /* RCTMapboxGL.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTMapboxGL.xcodeproj; path = "../node_modules/react-native-mapbox-gl/ios/RCTMapboxGL.xcodeproj"; sourceTree = "<group>"; };
+		80F42ACF1D8A259E007A216D /* Mapbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Mapbox.framework; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
-		8E7905E47ED847EEB5926F42 /* AirMaps.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = AirMaps.xcodeproj; path = "../node_modules/react-native-maps/ios/AirMaps.xcodeproj"; sourceTree = "<group>"; };
-		D6662960086742649BF992B6 /* libAirMaps.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libAirMaps.a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -170,12 +192,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				800B60051D8A1CC70040BC3B /* libRCTMapboxGL.a in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
 				00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */,
 				8004C16A1D81D9E100F4A0FF /* FBSDKLoginKit.framework in Frameworks */,
 				00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */,
 				8004C16B1D81D9E100F4A0FF /* FBSDKShareKit.framework in Frameworks */,
 				00C302E81ABCBA2D00DB3ED1 /* libRCTImage.a in Frameworks */,
+				80F42AD01D8A259E007A216D /* Mapbox.framework in Frameworks */,
 				133E29F31AD74F7200F7D852 /* libRCTLinking.a in Frameworks */,
 				00C302E91ABCBA2D00DB3ED1 /* libRCTNetwork.a in Frameworks */,
 				139105C61AF99C1200B5F7CC /* libRCTSettings.a in Frameworks */,
@@ -184,7 +208,6 @@
 				8004C16D1D81DA7000F4A0FF /* FBSDKCoreKit.framework in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
 				E30198E4C19743D2B3E65745 /* libRCTFBSDK.a in Frameworks */,
-				B1DBB96D09A64D2B8DBFE02E /* libAirMaps.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -305,6 +328,7 @@
 		8004C1671D81CC2E00F4A0FF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				800B60041D8A1CC70040BC3B /* libRCTMapboxGL.a */,
 				8004C16C1D81DA7000F4A0FF /* FBSDKCoreKit.framework */,
 				8004C1681D81D9E000F4A0FF /* FBSDKLoginKit.framework */,
 				8004C1691D81D9E100F4A0FF /* FBSDKShareKit.framework */,
@@ -312,10 +336,11 @@
 			path = Frameworks;
 			sourceTree = "<group>";
 		};
-		80B4C25A1D88B00400BC0336 /* Products */ = {
+		80F42AC71D8A2540007A216D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				80B4C25E1D88B00400BC0336 /* libAirMaps.a */,
+				80F42ACC1D8A2540007A216D /* libRCTMapboxGL.a */,
+				80F42ACE1D8A2540007A216D /* RCTMapboxGLTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -323,7 +348,6 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				804C863D1D8922E800F12843 /* ios */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
 				00C302A71ABCB8CE00DB3ED1 /* RCTActionSheet.xcodeproj */,
 				00C302B51ABCB90400DB3ED1 /* RCTGeolocation.xcodeproj */,
@@ -335,7 +359,6 @@
 				00C302DF1ABCB9EE00DB3ED1 /* RCTVibration.xcodeproj */,
 				139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */,
 				49B5198A88BD4F7897FDE38C /* RCTFBSDK.xcodeproj */,
-				8E7905E47ED847EEB5926F42 /* AirMaps.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -351,6 +374,8 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				80F42ACF1D8A259E007A216D /* Mapbox.framework */,
+				80F42AC61D8A2540007A216D /* RCTMapboxGL.xcodeproj */,
 				8004C1671D81CC2E00F4A0FF /* Frameworks */,
 				13B07FAE1A68108700A75B9A /* exapp */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -399,6 +424,8 @@
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
+				800B60011D8A1B9D0040BC3B /* Embed Frameworks */,
+				800B60021D8A1BF60040BC3B /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -440,10 +467,6 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 80B4C25A1D88B00400BC0336 /* Products */;
-					ProjectRef = 8E7905E47ED847EEB5926F42 /* AirMaps.xcodeproj */;
-				},
-				{
 					ProductGroup = 00C302A81ABCB8CE00DB3ED1 /* Products */;
 					ProjectRef = 00C302A71ABCB8CE00DB3ED1 /* RCTActionSheet.xcodeproj */;
 				},
@@ -462,6 +485,10 @@
 				{
 					ProductGroup = 78C398B11ACF4ADC00677621 /* Products */;
 					ProjectRef = 78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */;
+				},
+				{
+					ProductGroup = 80F42AC71D8A2540007A216D /* Products */;
+					ProjectRef = 80F42AC61D8A2540007A216D /* RCTMapboxGL.xcodeproj */;
 				},
 				{
 					ProductGroup = 00C302D41ABCB9D200DB3ED1 /* Products */;
@@ -567,11 +594,18 @@
 			remoteRef = 8004C15C1D81C7DA00F4A0FF /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		80B4C25E1D88B00400BC0336 /* libAirMaps.a */ = {
+		80F42ACC1D8A2540007A216D /* libRCTMapboxGL.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
-			path = libAirMaps.a;
-			remoteRef = 80B4C25D1D88B00400BC0336 /* PBXContainerItemProxy */;
+			path = libRCTMapboxGL.a;
+			remoteRef = 80F42ACB1D8A2540007A216D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		80F42ACE1D8A2540007A216D /* RCTMapboxGLTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = RCTMapboxGLTests.xctest;
+			remoteRef = 80F42ACD1D8A2540007A216D /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		832341B51AAA6A8300B99B32 /* libRCTText.a */ = {
@@ -595,7 +629,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				804C863E1D8922E800F12843 /* ios in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 			);
@@ -617,6 +650,19 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/packager/react-native-xcode.sh";
+		};
+		800B60021D8A1BF60040BC3B /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "bash \"${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Mapbox.framework/strip-frameworks.sh\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -718,10 +764,14 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/../node_modules/react-native/React/**",
 					"$(SRCROOT)/../node_modules/react-native-fbsdk/ios/RCTFBSDK/**",
-					"$(SRCROOT)/../node_modules/react-native-maps/ios/AirMaps/**",
 				);
 				INFOPLIST_FILE = exapp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/build/Debug-iphoneos/RCTMapboxGL",
+				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -747,10 +797,14 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/../node_modules/react-native/React/**",
 					"$(SRCROOT)/../node_modules/react-native-fbsdk/ios/RCTFBSDK/**",
-					"$(SRCROOT)/../node_modules/react-native-maps/ios/AirMaps/**",
 				);
 				INFOPLIST_FILE = exapp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/build/Debug-iphoneos/RCTMapboxGL",
+				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -801,7 +855,6 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/../node_modules/react-native/React/**",
 					"$(SRCROOT)/../node_modules/react-native-fbsdk/ios/RCTFBSDK/**",
-					"$(SRCROOT)/../node_modules/react-native-maps/ios/AirMaps/**",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
@@ -843,7 +896,6 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/../node_modules/react-native/React/**",
 					"$(SRCROOT)/../node_modules/react-native-fbsdk/ios/RCTFBSDK/**",
-					"$(SRCROOT)/../node_modules/react-native-maps/ios/AirMaps/**",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
