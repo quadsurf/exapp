@@ -1,6 +1,7 @@
 package com.exapp;
 
 import com.facebook.react.ReactActivity;
+import com.imagepicker.ImagePickerPackage;
 import com.airbnb.android.react.maps.MapsPackage;
 
 public class MainActivity extends ReactActivity {
