@@ -301,7 +301,7 @@ export class settings extends Component {
         <TouchableHighlight
           onPress={() => this.signOut()}
           style={styles.labelRowView}>
-          <Text>
+          <Text style={styles.labelRowText}>
             Log Out
           </Text>
         </TouchableHighlight>
@@ -311,6 +311,21 @@ export class settings extends Component {
         </Text>
 
         </ScrollView>
+
+        <View style={styles.footerView}>
+          <TouchableHighlight
+            onPress={() => {
+              this.props.navigator.push({
+                screen: 'home'
+              })
+            }}
+          >
+            <Text style={styles.footerText}>
+              Find a Bae, Boo, or Babe
+            </Text>
+          </TouchableHighlight>
+        </View>
+
       </View>
     )
   }
@@ -328,9 +343,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#42bfc2'
   },
+  footerView: {
+    height: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#42bfc2',
+    bottom: 0
+  },
   headerText: {
     color: '#fff',
     paddingTop: 15,
+    fontSize: 20
+  },
+  footerText: {
+    color: '#fff',
     fontSize: 20
   },
   labelRowView: {
